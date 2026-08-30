@@ -1,0 +1,60 @@
+/* Lightweight animation utilities and performance-focused micro-interactions */
+
+/* Reveal utility (vanilla-friendly + GSAP-friendly). Use alongside existing classes.
+   Add class="reveal" to a section or element to get a gentle fade-up on scroll. */
+.reveal, .reveal-up, .card {
+  transform: translateY(12px);
+  opacity: 0;
+  transition: transform 0.65s cubic-bezier(.22,.98,.1,.99), opacity 0.65s ease;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.reveal.is-visible, .reveal-up.is-visible, .card.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.reveal-up { transform: translateY(18px); }
+
+/* Hover-zoom utility for images and cards. Non-invasive; add .hover-zoom or .card-hover */
+.hover-zoom, .card-hover {
+  transition: transform 300ms cubic-bezier(.2,.8,.2,1), box-shadow 300ms ease;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.hover-zoom:hover:not(.no-hover), .card-hover:hover:not(.no-hover),
+.hover-zoom:focus-within:not(.no-hover), .card-hover:focus-within:not(.no-hover) {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+}
+
+/* Image wrapper helper: keep overflow hidden and apply gentle scale on hover */
+.img-wrap { overflow: hidden; display: block; }
+.img-wrap img {
+  transition: transform 450ms cubic-bezier(.2,.8,.2,1);
+  transform-origin: center;
+  will-change: transform;
+}
+.img-wrap:hover img, .img-wrap:focus-within img { transform: scale(1.04); }
+
+/* CTA subtle lift */
+.btn, .btn-cta { transition: transform 180ms ease, box-shadow 180ms ease; }
+.btn:hover, .btn-cta:hover, .btn:focus, .btn-cta:focus { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-up, .card, .card-hover, .hover-zoom, .img-wrap img, .btn, .btn-cta {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    will-change: auto !important;
+  }
+}
+
+/* Slightly reduce motion durations on small screens */
+@media (max-width: 800px) {
+  .reveal, .reveal-up, .card { transition-duration: 0.45s; }
+  .img-wrap img { transition-duration: 300ms; }
+}
