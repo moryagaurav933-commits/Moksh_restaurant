@@ -37,28 +37,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Video poster
     const heroPosterKey = 'heroPoster';
-    if (media[heroPosterKey]) {
-      // set poster on video and on announcement img (if present)
-      heroVideoEl.setAttribute('poster', media[heroPosterKey]);
+    if (media[heroPosterKey] && heroVideoEl) {
+      if (!heroVideoEl.getAttribute('poster') || heroVideoEl.getAttribute('poster') !== media[heroPosterKey]) {
+        heroVideoEl.setAttribute('poster', media[heroPosterKey]);
+      }
       const announceImg = $('#announceModal img[data-media-key="heroPoster"]');
       if (announceImg) announceImg.src = media[heroPosterKey];
     }
 
     // Video source
-    if (media.heroVideo) {
-      // Create source element (replace any existing)
-      let src = heroVideoEl.querySelector('source');
-      if (src) src.remove();
-      const sourceEl = document.createElement('source');
-      sourceEl.setAttribute('src', media.heroVideo);
-      sourceEl.setAttribute('type', 'video/mp4');
-      sourceEl.setAttribute('data-media-key', 'heroVideo');
-      heroVideoEl.appendChild(sourceEl);
-
-      // Try to play (some browsers restrict autoplay unless muted; we set muted attribute)
-      heroVideoEl.load();
+    if (media.heroVideo && heroVideoEl) {
+      let sourceEl = heroVideoEl.querySelector('source');
+      if (!sourceEl) {
+        sourceEl = document.createElement('source');
+        sourceEl.setAttribute('src', media.heroVideo);
+        sourceEl.setAttribute('type', 'video/mp4');
+        sourceEl.setAttribute('data-media-key', 'heroVideo');
+        heroVideoEl.appendChild(sourceEl);
+        heroVideoEl.load();
+      } else if (sourceEl.getAttribute('src') !== media.heroVideo) {
+        sourceEl.setAttribute('src', media.heroVideo);
+        heroVideoEl.load();
+      }
+      // Ensure autoplay starts without waiting
       heroVideoEl.play().catch(() => {
-        // failing autoplay is fine — poster is visible
+        // Autoplay fallback (muted is set on video)
       });
     }
 
@@ -99,6 +102,44 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   applyMediaManifest();
+
+  // Lazy-load offscreen videos so hero video gets full bandwidth immediately
+  function initLazyVideos() {
+    const lazyVideos = $$('video.lazy-video');
+    if ('IntersectionObserver' in window) {
+      const videoObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const video = entry.target;
+            const sources = $$('source[data-src]', video);
+            sources.forEach(src => {
+              src.src = src.dataset.src;
+              src.removeAttribute('data-src');
+            });
+            video.load();
+            if (video.hasAttribute('autoplay')) {
+              video.play().catch(() => {});
+            }
+            observer.unobserve(video);
+          }
+        });
+      }, { rootMargin: '400px 0px' });
+
+      lazyVideos.forEach(v => videoObserver.observe(v));
+    } else {
+      // Fallback: load immediately
+      lazyVideos.forEach(video => {
+        const sources = $$('source[data-src]', video);
+        sources.forEach(src => {
+          src.src = src.dataset.src;
+          src.removeAttribute('data-src');
+        });
+        video.load();
+      });
+    }
+  }
+
+  initLazyVideos();
 
   // Populate gallery grid from media.galleryGrid
   function populateGallery() {
