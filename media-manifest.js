@@ -1,28 +1,28 @@
 const media = {
-  // Hero video poster (also reused in the announcement modal thumbnail)
-  heroPoster: "assets/photos/rooftop-night.jpg",
+  // Hero video poster (exact frame 0 of hero video)
+  heroPoster: "assets/photos/hero-poster.jpg",
   
-  // Hero background video wired to your file
-  heroVideo: "assets/videos/SnapReels.Net_AQOCYj9LfAib1VHK_zXOzpyHQBTtCgPJVsmesij3yp-1v9kA987cIIUADLPrt2TrC5mF_RpPeIVfz04buj2cggk181NckR_07fU9Ois - ROTATE - Videobolt.net.mp4",
+  // Fast-start web-optimized hero video
+  heroVideo: "assets/videos/hero_optimized.mp4",
 
   // Philosophy / "Flavors that hold the moment" split section
   philosophyFood: "assets/photos/food.jpg",
 
   // Gallery teaser split section
-  galleryTeaser: "assets/photos/patio-tile-floor.jpg",
+  galleryTeaser: "assets/photos/moksh.jpg",
 
-  // Three feature cards
-  cardEvents: "assets/photos/lounge-red-lanterns.jpg",
-  cardGallery: "assets/photos/lounge-chandelier.jpg",
-  cardReservations: "assets/photos/lounge-yellow-arches.jpg",
+  // Three feature cards / photos
+  cardEvents: "assets/photos/moksh.jpg",
+  cardGallery: "assets/photos/view3.jpg",
+  cardReservations: "assets/photos/view4.jpg",
 
   // About section
-  aboutPhotoBW: "assets/photos/lounge-chandelier.jpg",
+  aboutPhotoBW: "assets/photos/food.jpg",
 
   // Contact section full-bleed background
-  contactBackground: "assets/photos/rooftop-night.jpg",
+  contactBackground: "assets/photos/moksh.jpg",
 
-  // Gallery grid — exactly the 8 final gallery photos (no extras)
+  // Gallery grid — exactly the 8 final gallery photos
   galleryGrid: [
     "assets/photos/view1.jpg",
     "assets/photos/view2.jpg",
@@ -36,7 +36,11 @@ const media = {
 
   // Menu highlights
   menuImages: [
-    "menu-1-chinese-roti.jpg",
-    "menu-5-main-course.jpg"
+    "assets/photos/breakfast.jpeg",
+    "assets/photos/drinks.jpeg",
+    "assets/photos/main course.jpeg",
+    "assets/photos/snacks.jpeg",
+    "assets/photos/snacks1.jpeg",
+    "assets/photos/Starters.jpeg"
   ]
 };
